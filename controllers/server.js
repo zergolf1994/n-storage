@@ -1,5 +1,5 @@
 const { Server } = require("../models");
-const { getOs } = require("../utils");
+const getOs = require("../utils/getOs");
 
 exports.serverCreate = async (req, res) => {
   try {
