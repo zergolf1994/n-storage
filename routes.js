@@ -12,6 +12,9 @@ router.get("/disk", DiskUpdate);
 
 router.get("/file-size/:slug/:file_name", FileDataSize);
 
+const { serverCreate } = require("./controllers/server");
+router.get("/server/create", serverCreate);
+
 router.all("*", async (req, res) => {
   return res.status(404).json({ error: true, msg: `link_not_found` });
 });
