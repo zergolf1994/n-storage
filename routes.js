@@ -10,6 +10,9 @@ router.get("/manager", FileList);
 
 router.get("/disk", DiskUpdate);
 
+const { DeleteDir } = require("./controllers/fileDelete");
+router.post("/delete-dir", DeleteDir);
+
 router.get("/file-size/:slug/:file_name", FileDataSize);
 
 const { serverCreate } = require("./controllers/server");

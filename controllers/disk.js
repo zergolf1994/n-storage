@@ -15,7 +15,7 @@ exports.DiskUpdate = async (req, res) => {
     let dataUpdate = {
       ...disk,
     };
-    if (disk?.diskPercent > 50) dataUpdate.active = false;
+    if (disk?.diskPercent > 95) dataUpdate.active = false;
     await Server.List.findByIdAndUpdate(
       { _id: server?._id },
       { ...dataUpdate }
