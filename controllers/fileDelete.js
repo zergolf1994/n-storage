@@ -40,3 +40,46 @@ exports.DeleteDir = async (req, res) => {
     return res.json({ error: true, msg: "ผิดพลาด" });
   }
 };
+
+exports.DeleteFile = async (req, res) => {
+  try {
+    let { slug, serverId, videoId, name } = req.body;
+    if (!slug || !serverId || !videoId || !name)
+      return res.json({ error: true, msg: "ข้อมูลไม่ครบ" });
+
+    let deleteTarget = path.join(global.dirPublic, slug, `file_${name}.mp4`);
+    await fs.remove(deleteTarget);
+
+    let DirTarget = path.join(global.dirPublic, slug);
+    const lists = await fs.readdir(DirTarget);
+    if (lists?.length) {
+      await fs.remove(DirTarget);
+    }
+
+    // ลบไฟล์ data
+    const dbDelete = await File.Data.deleteOne({
+      _id: videoId,
+      serverId,
+      name: name,
+    });
+
+    if (dbDelete?.deletedCount > 0) {
+      // อัพเดตดิส
+      let disk = await checkDisk();
+      let dataUpdate = {
+        ...disk,
+      };
+      if (disk?.diskPercent > 95) dataUpdate.active = false;
+      await Server.List.findByIdAndUpdate({ _id: serverId }, { ...dataUpdate });
+
+      return res.json({
+        msg: "ลบไฟล์สำเร็จ",
+      });
+    } else {
+      return res.json({ error: true, msg: `ลองอีกครั้ง` });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: true, msg: "ผิดพลาด" });
+  }
+};

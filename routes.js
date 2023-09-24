@@ -10,8 +10,9 @@ router.get("/manager", FileList);
 
 router.get("/disk", DiskUpdate);
 
-const { DeleteDir } = require("./controllers/fileDelete");
+const { DeleteDir, DeleteFile } = require("./controllers/fileDelete");
 router.post("/delete-dir", DeleteDir);
+router.post("/delete-file", DeleteFile);
 
 router.get("/file-size/:slug/:file_name", FileDataSize);
 
