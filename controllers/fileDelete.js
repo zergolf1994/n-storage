@@ -48,12 +48,16 @@ exports.DeleteFile = async (req, res) => {
       return res.json({ error: true, msg: "ข้อมูลไม่ครบ" });
 
     let deleteTarget = path.join(global.dirPublic, slug, `file_${name}.mp4`);
-    await fs.remove(deleteTarget);
+    try {
+      await fs.remove(deleteTarget);
+    } catch (error) {}
 
     let DirTarget = path.join(global.dirPublic, slug);
     const lists = await fs.readdir(DirTarget);
     if (lists?.length) {
-      await fs.remove(DirTarget);
+      try {
+        await fs.remove(DirTarget);
+      } catch (error) {}
     }
 
     // ลบไฟล์ data
