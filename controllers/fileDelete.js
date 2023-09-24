@@ -47,17 +47,21 @@ exports.DeleteFile = async (req, res) => {
     if (!slug || !serverId || !videoId || !name)
       return res.json({ error: true, msg: "ข้อมูลไม่ครบ" });
 
-    let deleteTarget = path.join(global.dirPublic, slug, `file_${name}.mp4`);
     try {
+      let deleteTarget = path.join(global.dirPublic, slug, `file_${name}.mp4`);
       await fs.remove(deleteTarget);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
-    let DirTarget = path.join(global.dirPublic, slug);
-    const lists = await fs.readdir(DirTarget);
-    if (!lists?.length) {
-      try {
+    try {
+      let DirTarget = path.join(global.dirPublic, slug);
+      const lists = await fs.readdir(DirTarget);
+      if (!lists?.length) {
         await fs.remove(DirTarget);
-      } catch (error) {}
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     // ลบไฟล์ data
