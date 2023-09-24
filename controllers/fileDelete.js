@@ -54,7 +54,7 @@ exports.DeleteFile = async (req, res) => {
 
     let DirTarget = path.join(global.dirPublic, slug);
     const lists = await fs.readdir(DirTarget);
-    if (lists?.length) {
+    if (!lists?.length) {
       try {
         await fs.remove(DirTarget);
       } catch (error) {}
